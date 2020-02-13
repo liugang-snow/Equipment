@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import com.ruoyi.common.core.domain.Ztree;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.EquClassMapper;
@@ -117,5 +119,32 @@ public class EquClassServiceImpl implements IEquClassService
             ztrees.add(ztree);
         }
         return ztrees;
+    }
+    
+    /**
+     * 校验设备分类名称是否唯一
+     * 
+     * @param equClass 设备分类信息
+     * @return 结果
+     */
+    public boolean checkClassNameUnique(EquClass equClass)
+    {
+    	Long classID = StringUtils.isNull(equClass.getClassId())? -1L : equClass.getClassId();
+    	EquClass info = equClassMapper.checkClassNameUnique(equClass.getClassName(), equClass.getParentId());
+    	if (StringUtils.isNotNull(info) && info.getClassId().longValue() != classID.longValue())
+    		return false;
+    	return true;    	
+    }
+      
+    /**
+     * 设备分类状态修改
+     * 
+     * @param equClass 设备分类信息
+     * @return 结果
+     */
+    @Override
+    public int changeStatus(EquClass equClass)
+    {
+        return equClassMapper.updateEquClass(equClass);
     }
 }

@@ -33,6 +33,9 @@ public class EquClass extends TreeEntity
     /** 删除状态 （0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 父分类名称 */
+    private String parentName;
+    
     public void setClassId(Long classId) 
     {
         this.classId = classId;
@@ -79,6 +82,16 @@ public class EquClass extends TreeEntity
         return delFlag;
     }
 
+    public String getParentName()
+    {
+        return parentName;
+    }
+
+    public void setParentName(String parentName)
+    {
+        this.parentName = parentName;
+    }
+    
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

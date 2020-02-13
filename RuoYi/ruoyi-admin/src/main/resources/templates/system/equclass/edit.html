@@ -33,7 +33,7 @@
 				<label class="col-sm-3 control-label">状态：</label>
 				<div class="col-sm-8">
 			        <label class="toggle-switch switch-solid">
-                        <input type="checkbox" id="status" checked>
+                        <input type="checkbox" id="status" th:checked="${equClass.status == '0' ? true : false}">
                         <span></span>
                     </label>
 				</div>
@@ -55,7 +55,10 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-equclass-edit').serialize());
+            	var data = $('#form-equclass-edit').serializeArray();
+            	var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+            	data.push({"name": "status", "value": status});
+                $.operate.save(prefix + "/edit", data);
             }
         }
 

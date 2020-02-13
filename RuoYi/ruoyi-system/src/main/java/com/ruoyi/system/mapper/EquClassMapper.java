@@ -3,6 +3,8 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.system.domain.EquClass;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 设备分类Mapper接口
  * 
@@ -50,7 +52,7 @@ public interface EquClassMapper
      * @return 结果
      */
     public int deleteEquClassById(Long classId);
-
+    
     /**
      * 批量删除设备分类
      * 
@@ -58,4 +60,13 @@ public interface EquClassMapper
      * @return 结果
      */
     public int deleteEquClassByIds(String[] classIds);
+    
+    /**
+     * 校验设备分类名称是否唯一
+     * 
+     * @param className 设备分类名称
+     * @param parentId 父分类id 
+     * @return
+     */
+    public EquClass checkClassNameUnique(@Param("className") String className, @Param("parentId") Long parentId);
 }

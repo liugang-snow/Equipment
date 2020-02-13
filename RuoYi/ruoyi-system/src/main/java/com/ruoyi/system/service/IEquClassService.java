@@ -66,4 +66,20 @@ public interface IEquClassService
      * @return 所有设备分类信息
      */
     public List<Ztree> selectEquClassTree();
+    
+    /**
+     * 校验设备分类名称是否唯一
+     * 
+     * @param equClass
+     * @return
+     */
+    public boolean checkClassNameUnique(EquClass equClass);
+    
+    /**
+     * 设备分类状态修改
+     * 
+     * @param equclass 设备分类信息
+     * @return 结果
+     */
+    public int changeStatus(EquClass equclass);
 }

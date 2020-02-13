@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+import java.util.UUID;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import com.ruoyi.system.service.IEquClassService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.domain.Ztree;
 
@@ -67,20 +70,17 @@ public class EquClassController extends BaseController
         ExcelUtil<EquClass> util = new ExcelUtil<EquClass>(EquClass.class);
         return util.exportExcel(list, "equclass");
     }
-
+  
     /**
-     * 新增设备分类
+     * 新增部门
      */
-    @GetMapping(value = { "/add/{classId}", "/add/" })
-    public String add(@PathVariable(value = "classId", required = false) Long classId, ModelMap mmap)
+    @GetMapping("/add/{parentId}")
+    public String add(@PathVariable("parentId") Long parentId, ModelMap mmap)
     {
-        if (StringUtils.isNotNull(classId))
-        {
-            mmap.put("equClass", equClassService.selectEquClassById(classId));
-        }
+        mmap.put("equClass", equClassService.selectEquClassById(parentId));
         return prefix + "/add";
     }
-
+    
     /**
      * 新增保存设备分类
      */
@@ -90,6 +90,18 @@ public class EquClassController extends BaseController
     @ResponseBody
     public AjaxResult addSave(EquClass equClass)
     {
+    	if(!equClassService.checkClassNameUnique(equClass))
+    	{
+    		return error("新增设备分类'" + equClass.getClassName() + "'失败，名称已存在");
+    	}
+    	equClass.setClassGuid(UUID.randomUUID().toString());
+    	equClass.setCreateBy(ShiroUtils.getLoginName());
+    	
+    	EquClass info = equClassService.selectEquClassById(equClass.getParentId());
+    	if (StringUtils.isNotNull(info))
+    	{
+    		equClass.setAncestors(info.getAncestors() + "," + equClass.getParentId());
+    	}   	
         return toAjax(equClassService.insertEquClass(equClass));
     }
 
@@ -100,6 +112,10 @@ public class EquClassController extends BaseController
     public String edit(@PathVariable("classId") Long classId, ModelMap mmap)
     {
         EquClass equClass = equClassService.selectEquClassById(classId);
+        if (StringUtils.isNotNull(equClass) && 1L == classId)
+        {
+        	equClass.setParentName("无");
+        }
         mmap.put("equClass", equClass);
         return prefix + "/edit";
     }
@@ -113,6 +129,15 @@ public class EquClassController extends BaseController
     @ResponseBody
     public AjaxResult editSave(EquClass equClass)
     {
+        if (!equClassService.checkClassNameUnique(equClass))
+        {
+            return error("修改设备分类'" + equClass.getClassName() + "'失败，名称已存在");
+        }
+        else if (equClass.getParentId().equals(equClass.getClassId()))
+        {
+            return error("修改部门'" + equClass.getClassName() + "'失败，上级分类不能是自己");
+        }      
+    	equClass.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(equClassService.updateEquClass(equClass));
     }
 
@@ -150,5 +175,17 @@ public class EquClassController extends BaseController
     {
         List<Ztree> ztrees = equClassService.selectEquClassTree();
         return ztrees;
+    }
+    
+    /**
+     * 设备分类状态修改
+     */
+    @Log(title = "设备分类管理", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("system:equclass:edit")
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public AjaxResult changeStatus(EquClass equClass)
+    {
+        return toAjax(equClassService.changeStatus(equClass));
     }
 }
