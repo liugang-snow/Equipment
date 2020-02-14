@@ -72,7 +72,7 @@ public class EquClassController extends BaseController
     }
   
     /**
-     * 新增部门
+     * 新增设备分类
      */
     @GetMapping("/add/{parentId}")
     public String add(@PathVariable("parentId") Long parentId, ModelMap mmap)
@@ -94,7 +94,7 @@ public class EquClassController extends BaseController
     	{
     		return error("新增设备分类'" + equClass.getClassName() + "'失败，名称已存在");
     	}
-    	equClass.setClassGuid(UUID.randomUUID().toString());
+    	equClass.setClassGuid(UUID.randomUUID().toString().replace("-",""));
     	equClass.setCreateBy(ShiroUtils.getLoginName());
     	
     	EquClass info = equClassService.selectEquClassById(equClass.getParentId());
