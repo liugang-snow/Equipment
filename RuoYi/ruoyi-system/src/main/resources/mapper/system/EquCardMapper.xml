@@ -39,10 +39,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectEquCardList" parameterType="EquCard" resultMap="EquCardResult">
         <include refid="selectEquCardVo"/>
         <where>  
-            <if test="equSerial != null  and equSerial != ''"> and equ_serial like concat('%', #{equSerial}, '%')</if>
-            <if test="equName != null  and equName != ''"> and equ_name like concat('%', #{equName}, '%')</if>
-            <if test="equStatus != null  and equStatus != ''"> and equ_status = #{equStatus}</if>
-            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and equ_name like concat('%', #{equName}, '%')
+            </if>
+            <if test="equStatus != null  and equStatus != ''"> 
+            	and equ_status = #{equStatus}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+            and del_flag = '0'
+            order by equ_id 
         </where>
     </select>
     
@@ -143,7 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteEquCardByIds" parameterType="String">
-        delete from equ_card where equ_id in 
+        update equ_card set del_flag = '2' where equ_id in 
         <foreach item="equId" collection="array" open="(" separator="," close=")">
             #{equId}
         </foreach>

@@ -34,10 +34,10 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2020-02-14
  */
 @Controller
-@RequestMapping("/system/euqcard")
+@RequestMapping("/system/equcard")
 public class EquCardController extends BaseController
 {
-    private String prefix = "system/euqcard";
+    private String prefix = "system/equcard";
 
     @Autowired
     private IEquCardService equCardService;
@@ -48,17 +48,17 @@ public class EquCardController extends BaseController
     @Autowired
     private ISysDeptService sysDeptService;
     
-    @RequiresPermissions("system:euqcard:view")
+    @RequiresPermissions("system:equcard:view")
     @GetMapping()
-    public String euqcard()
+    public String equcard()
     {
-        return prefix + "/euqcard";
+        return prefix + "/equcard";
     }
 
     /**
      * 查询设备档案列表
      */
-    @RequiresPermissions("system:euqcard:list")
+    @RequiresPermissions("system:equcard:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(EquCard equCard)
@@ -71,7 +71,7 @@ public class EquCardController extends BaseController
     /**
      * 导出设备档案列表
      */
-    @RequiresPermissions("system:euqcard:export")
+    @RequiresPermissions("system:equcard:export")
     @Log(title = "设备档案", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -79,7 +79,7 @@ public class EquCardController extends BaseController
     {
         List<EquCard> list = equCardService.selectEquCardList(equCard);
         ExcelUtil<EquCard> util = new ExcelUtil<EquCard>(EquCard.class);
-        return util.exportExcel(list, "euqcard");
+        return util.exportExcel(list, "equcard");
     }
 
     /**
@@ -94,7 +94,7 @@ public class EquCardController extends BaseController
     /**
      * 新增保存设备档案
      */
-    @RequiresPermissions("system:euqcard:add")
+    @RequiresPermissions("system:equcard:add")
     @Log(title = "设备档案", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -131,7 +131,7 @@ public class EquCardController extends BaseController
     /**
      * 修改保存设备档案
      */
-    @RequiresPermissions("system:euqcard:edit")
+    @RequiresPermissions("system:equcard:edit")
     @Log(title = "设备档案", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -146,7 +146,7 @@ public class EquCardController extends BaseController
     /**
      * 删除设备档案
      */
-    @RequiresPermissions("system:euqcard:remove")
+    @RequiresPermissions("system:equcard:remove")
     @Log(title = "设备档案", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

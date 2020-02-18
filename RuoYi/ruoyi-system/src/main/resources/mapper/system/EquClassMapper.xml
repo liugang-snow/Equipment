@@ -109,7 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteEquClassByIds" parameterType="String">
-        delete from equ_class where class_id in 
+        update equ_class set del_flag = '2' where class_id in 
         <foreach item="classId" collection="array" open="(" separator="," close=")">
             #{classId}
         </foreach>

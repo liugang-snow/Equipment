@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.EquContractMapper">
+    
+    <resultMap type="EquContract" id="EquContractResult">
+        <result property="conId"    column="con_id"    />
+        <result property="conGuid"    column="con_guid"    />
+        <result property="conCode"    column="con_code"    />
+        <result property="conName"    column="con_name"    />
+        <result property="conAmount"    column="con_amount"    />
+        <result property="conTime"    column="con_time"    />
+        <result property="conFirst"    column="con_first"    />
+        <result property="firstContacts"    column="first_contacts"    />
+        <result property="firstPhone"    column="first_phone"    />
+        <result property="conSecond"    column="con_second"    />
+        <result property="secondContacts"    column="second_contacts"    />
+        <result property="secondPhone"    column="second_phone"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectEquContractVo">
+        select con_id, con_guid, con_code, con_name, con_amount, con_time, con_first, first_contacts, first_phone, con_second, second_contacts, second_phone, remark, del_flag, create_by, create_time, update_by, update_time from equ_contract
+    </sql>
+
+    <select id="selectEquContractList" parameterType="EquContract" resultMap="EquContractResult">
+        <include refid="selectEquContractVo"/>
+        <where>  
+            <if test="conCode != null  and conCode != ''"> and con_code like concat('%', #{conCode}, '%')</if>
+            <if test="conName != null  and conName != ''"> and con_name like concat('%', #{conName}, '%')</if>
+            <if test="params.cbeginTime != null and params.cbeginTime != ''"><!-- 开始时间检索 -->
+				and date_format(con_time,'%y%m%d') &gt;= date_format(#{params.cbeginTime},'%y%m%d')
+			</if>
+			<if test="params.cendTime != null and params.cendTime != ''"><!-- 结束时间检索 -->
+				and date_format(con_time,'%y%m%d') &lt;= date_format(#{params.cendTime},'%y%m%d')
+			</if>
+          	<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+            and del_flag = '0'
+            order by con_id
+        </where>
+    </select>
+    
+    <select id="selectEquContractById" parameterType="Long" resultMap="EquContractResult">
+        <include refid="selectEquContractVo"/>
+        where con_id = #{conId}
+    </select>
+        
+    <insert id="insertEquContract" parameterType="EquContract" useGeneratedKeys="true" keyProperty="conId">
+        insert into equ_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="conGuid != null  and conGuid != ''">con_guid,</if>
+            <if test="conCode != null  and conCode != ''">con_code,</if>
+            <if test="conName != null  and conName != ''">con_name,</if>
+            <if test="conAmount != null ">con_amount,</if>
+            <if test="conTime != null ">con_time,</if>
+            <if test="conFirst != null  and conFirst != ''">con_first,</if>
+            <if test="firstContacts != null  and firstContacts != ''">first_contacts,</if>
+            <if test="firstPhone != null  and firstPhone != ''">first_phone,</if>
+            <if test="conSecond != null  and conSecond != ''">con_second,</if>
+            <if test="secondContacts != null  and secondContacts != ''">second_contacts,</if>
+            <if test="secondPhone != null  and secondPhone != ''">second_phone,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="conGuid != null  and conGuid != ''">#{conGuid},</if>
+            <if test="conCode != null  and conCode != ''">#{conCode},</if>
+            <if test="conName != null  and conName != ''">#{conName},</if>
+            <if test="conAmount != null ">#{conAmount},</if>
+            <if test="conTime != null ">#{conTime},</if>
+            <if test="conFirst != null  and conFirst != ''">#{conFirst},</if>
+            <if test="firstContacts != null  and firstContacts != ''">#{firstContacts},</if>
+            <if test="firstPhone != null  and firstPhone != ''">#{firstPhone},</if>
+            <if test="conSecond != null  and conSecond != ''">#{conSecond},</if>
+            <if test="secondContacts != null  and secondContacts != ''">#{secondContacts},</if>
+            <if test="secondPhone != null  and secondPhone != ''">#{secondPhone},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquContract" parameterType="EquContract">
+        update equ_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="conGuid != null  and conGuid != ''">con_guid = #{conGuid},</if>
+            <if test="conCode != null  and conCode != ''">con_code = #{conCode},</if>
+            <if test="conName != null  and conName != ''">con_name = #{conName},</if>
+            <if test="conAmount != null ">con_amount = #{conAmount},</if>
+            <if test="conTime != null ">con_time = #{conTime},</if>
+            <if test="conFirst != null  and conFirst != ''">con_first = #{conFirst},</if>
+            <if test="firstContacts != null  and firstContacts != ''">first_contacts = #{firstContacts},</if>
+            <if test="firstPhone != null  and firstPhone != ''">first_phone = #{firstPhone},</if>
+            <if test="conSecond != null  and conSecond != ''">con_second = #{conSecond},</if>
+            <if test="secondContacts != null  and secondContacts != ''">second_contacts = #{secondContacts},</if>
+            <if test="secondPhone != null  and secondPhone != ''">second_phone = #{secondPhone},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where con_id = #{conId}
+    </update>
+
+    <delete id="deleteEquContractById" parameterType="Long">
+        update equ_contract set del_flag = '2' where con_id = #{conId}
+    </delete>
+
+    <delete id="deleteEquContractByIds" parameterType="String">
+        update equ_contract set del_flag = '2' where con_id in 
+        <foreach item="conId" collection="array" open="(" separator="," close=")">
+            #{conId}
+        </foreach>
+    </delete>
+    
+</mapper>
