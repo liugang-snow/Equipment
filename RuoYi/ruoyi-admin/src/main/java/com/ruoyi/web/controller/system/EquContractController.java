@@ -129,4 +129,13 @@ public class EquContractController extends BaseController
     {
         return toAjax(equContractService.deleteEquContractByIds(ids));
     }
+    
+    /**
+     * 设备档案-选择合同
+     */
+    @GetMapping("/selectCons")
+    public String selectCons()
+    {
+        return prefix + "/selectCons";
+    }
 }

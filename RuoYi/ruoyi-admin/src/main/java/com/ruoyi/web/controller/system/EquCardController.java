@@ -15,14 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.EquCard;
-import com.ruoyi.system.domain.EquClass;
-import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.service.IEquCardService;
-import com.ruoyi.system.service.IEquClassService;
-import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -41,13 +36,7 @@ public class EquCardController extends BaseController
 
     @Autowired
     private IEquCardService equCardService;
-    
-    @Autowired
-    private IEquClassService equClassService;
-    
-    @Autowired
-    private ISysDeptService sysDeptService;
-    
+        
     @RequiresPermissions("system:equcard:view")
     @GetMapping()
     public String equcard()
@@ -114,16 +103,6 @@ public class EquCardController extends BaseController
     public String edit(@PathVariable("equId") Long equId, ModelMap mmap)
     {
         EquCard equCard = equCardService.selectEquCardById(equId);     
-        EquClass equClass = equClassService.selectEquClassById(equCard.getClassId());
-        if (StringUtils.isNotNull(equClass))
-        {
-        	equCard.setClassName(equClass.getClassName());
-        }
-        SysDept sysDept = sysDeptService.selectDeptById(equCard.getDeptId());
-        if (StringUtils.isNotNull(sysDept))
-        {
-        	equCard.setDeptName(sysDept.getDeptName());
-        }
         mmap.put("equCard", equCard);
         return prefix + "/edit";
     }
@@ -153,5 +132,125 @@ public class EquCardController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(equCardService.deleteEquCardByIds(ids));
+    }
+    
+    /**
+     * 选择设备
+     */
+    @RequiresPermissions("system:equcard:edit")
+    @GetMapping("/selectEqus/{id}/{type}")
+    public String selectEqus(@PathVariable("id") Long id, @PathVariable("type") String type, ModelMap mmap)
+    {
+        mmap.put("mId", id);
+        mmap.put("mType", type);      
+        return prefix + "/selectEqus";
+    }
+    
+    /**
+     * 设备列表-供应商-已添加
+     */
+    @RequiresPermissions("system:equcard:list")
+    @PostMapping("/selectEqus/selectSupList")
+    @ResponseBody
+    public TableDataInfo selectSupList(EquCard equCard)
+    {
+        startPage();
+        List<EquCard> list = equCardService.selectSupList(equCard);
+        return getDataTable(list);
+    }
+    
+    /**
+     * 设备列表-合同-已添加
+     */
+    @RequiresPermissions("system:equcard:list")
+    @PostMapping("/selectEqus/selectConList")
+    @ResponseBody
+    public TableDataInfo selectConList(EquCard equCard)
+    {
+        startPage();
+        List<EquCard> list = equCardService.selectConList(equCard);
+        return getDataTable(list);
+    }
+    
+    /**
+     * 移除设备档案
+     */
+    @RequiresPermissions("system:equcard:remove")
+    @Log(title = "设备档案", businessType = BusinessType.DELETE)
+    @PostMapping( "/selectEqus/cancel")
+    @ResponseBody
+    public AjaxResult cancel(Long id, String type)
+    {
+    	if (type.equals("sup"))
+    		return toAjax(equCardService.deleteSup(id));
+    	else
+    		return toAjax(equCardService.deleteCon(id));
+    }
+    
+    /**
+     * 批量移除设备档案
+     */
+    @RequiresPermissions("system:equcard:remove")
+    @Log(title = "设备档案", businessType = BusinessType.DELETE)
+    @PostMapping( "/selectEqus/cancels")
+    @ResponseBody
+    public AjaxResult cancels(String ids, String type)
+    {
+    	if (type.equals("sup"))
+    		return toAjax(equCardService.deleteSups(ids));
+    	else
+    		return toAjax(equCardService.deleteCons(ids));
+    }
+    
+    /**
+     * 设备列表-供应商-未已添加
+     */
+    @RequiresPermissions("system:equcard:list")
+    @PostMapping("/selectEqus/selectSupListNo")
+    @ResponseBody
+    public TableDataInfo selectSupListNo(EquCard equCard)
+    {
+        startPage();
+        List<EquCard> list = equCardService.selectSupListNo(equCard);
+        return getDataTable(list);
+    }
+    
+    /**
+     * 设备列表-合同-未已添加
+     */
+    @RequiresPermissions("system:equcard:list")
+    @PostMapping("/selectEqus/selectConListNo")
+    @ResponseBody
+    public TableDataInfo selectConListNo(EquCard equCard)
+    {
+        startPage();
+        List<EquCard> list = equCardService.selectConListNo(equCard);
+        return getDataTable(list);
+    }  
+    
+    /**
+     * 选择设备-添加设备
+     */
+    @GetMapping("/selectEqus/selectEquCards/{id}/{type}")
+    public String selectEquCards(@PathVariable("id") Long id, @PathVariable("type") String type, ModelMap mmap)
+    {
+        mmap.put("mId", id);
+        mmap.put("mType", type);      
+        return prefix + "/selectEquCards";
+    }
+    
+    /**
+     * 选择设备-添加设备-提交
+     */
+    @RequiresPermissions("system:equcard:update")
+    @Log(title = "设备档案", businessType = BusinessType.DELETE)
+    @PostMapping( "/selectEqus/selectCards")
+    @ResponseBody
+    public AjaxResult selectCards(String ids, Long mId, String mType)
+    {
+    	if (mType.equals("sup"))
+    		return toAjax(equCardService.selectCardsSup(ids, mId));
+    	else
+    		return toAjax(equCardService.selectCardsCon(ids, mId));
     }
 }

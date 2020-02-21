@@ -18,7 +18,7 @@
             },
             {
               "name": "class_guid",
-              "type": "DefaultString",
+              "type": "IdOrKey",
               "remark": "",
               "chnname": "Guid",
               "notNull": true
@@ -28,7 +28,8 @@
               "type": "BigInt",
               "remark": "",
               "chnname": "父级ID",
-              "notNull": true
+              "notNull": true,
+              "defaultValue": "0"
             },
             {
               "name": "ancestors",
@@ -56,7 +57,8 @@
               "type": "Char",
               "remark": "（0正常 1停用）",
               "chnname": "状态",
-              "notNull": true
+              "notNull": true,
+              "defaultValue": "0"
             },
             {
               "name": "remark",
@@ -64,6 +66,14 @@
               "remark": "",
               "chnname": "备注",
               "notNull": true
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": true,
+              "defaultValue": "0"
             },
             {
               "name": "create_by",
@@ -91,13 +101,6 @@
               "type": "DateTime",
               "remark": "",
               "chnname": "更新时间",
-              "notNull": true
-            },
-            {
-              "name": "del_flag",
-              "type": "Char",
-              "remark": "（0代表存在 2代表删除）",
-              "chnname": "删除状态",
               "notNull": true
             }
           ],
@@ -148,7 +151,558 @@
               "relationNoShow": true
             }
           ],
-          "chnname": "设备分类表"
+          "chnname": "设备分类表",
+          "remark": "设备分类表"
+        },
+        {
+          "title": "equ_card",
+          "fields": [
+            {
+              "name": "equ_id",
+              "type": "BigInt",
+              "remark": "主键",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "equ_guid",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "Guid",
+              "notNull": true,
+              "defaultValue": ""
+            },
+            {
+              "name": "equ_serial",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "设备流水号"
+            },
+            {
+              "name": "equ_code",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "设备编号"
+            },
+            {
+              "name": "equ_name",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "设备名称"
+            },
+            {
+              "name": "class_id",
+              "type": "BigInt",
+              "remark": "设备分类表主键",
+              "chnname": "设备类别"
+            },
+            {
+              "name": "equ_count",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "数量"
+            },
+            {
+              "name": "equ_sprice",
+              "type": "Money",
+              "remark": "元",
+              "chnname": "单价"
+            },
+            {
+              "name": "equ_price",
+              "type": "Money",
+              "remark": "元",
+              "chnname": "总价"
+            },
+            {
+              "name": "contract_id",
+              "type": "BigInt",
+              "remark": "设备合同表主键",
+              "chnname": "合同"
+            },
+            {
+              "name": "supplier_id",
+              "type": "BigInt",
+              "remark": "设备供应商表主键",
+              "chnname": "供应商"
+            },
+            {
+              "name": "equ_brand",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "品牌"
+            },
+            {
+              "name": "equ_param",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "规格型号"
+            },
+            {
+              "name": "dept_id",
+              "type": "BigInt",
+              "remark": "部门表主键",
+              "chnname": "所属部门"
+            },
+            {
+              "name": "equ_admin",
+              "type": "IdOrKey",
+              "remark": "用户表主键",
+              "chnname": "设备管理员"
+            },
+            {
+              "name": "equ_time",
+              "type": "Date",
+              "remark": "",
+              "chnname": "设备采购时间"
+            },
+            {
+              "name": "equ_year",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "设备使用年限"
+            },
+            {
+              "name": "equ_status",
+              "type": "Char",
+              "remark": "（0-闲置 1-正常使用 2-故障 3-报废报损）",
+              "chnname": "设备使用状态"
+            },
+            {
+              "name": "equ_area",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "所在区域"
+            },
+            {
+              "name": "equ_attribute",
+              "type": "IdOrKey",
+              "remark": "字典选取",
+              "chnname": "特种属性"
+            },
+            {
+              "name": "remark",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": false,
+              "defaultValue": "0"
+            },
+            {
+              "name": "create_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": false
+            },
+            {
+              "name": "create_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": false
+            },
+            {
+              "name": "update_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "设备档案表",
+          "remark": "设备档案表"
+        },
+        {
+          "title": "equ_supplier",
+          "fields": [
+            {
+              "name": "sup_id",
+              "type": "BigInt",
+              "remark": "主键",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "sup_guid",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "Guid",
+              "notNull": true,
+              "defaultValue": ""
+            },
+            {
+              "name": "sup_code",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "统一社会信用代码"
+            },
+            {
+              "name": "sup_name",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "企业名称"
+            },
+            {
+              "name": "sup_leg",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "法定代表人"
+            },
+            {
+              "name": "sup_adder",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "住所"
+            },
+            {
+              "name": "sup_contact",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "联系人"
+            },
+            {
+              "name": "sup_phone",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "联系方式"
+            },
+            {
+              "name": "remark",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "status",
+              "type": "Char",
+              "remark": "（0代表正常 1代表拉黑）",
+              "chnname": "状态",
+              "defaultValue": "0"
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": false,
+              "defaultValue": "0"
+            },
+            {
+              "name": "create_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": false
+            },
+            {
+              "name": "create_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": false
+            },
+            {
+              "name": "update_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "设备供应商表",
+          "remark": "设备供应商表"
+        },
+        {
+          "title": "equ_contract",
+          "fields": [
+            {
+              "name": "con_id",
+              "type": "BigInt",
+              "remark": "主键",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "con_guid",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "Guid",
+              "notNull": true,
+              "defaultValue": ""
+            },
+            {
+              "name": "con_code",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "合同编号"
+            },
+            {
+              "name": "con_name",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "合同名称"
+            },
+            {
+              "name": "con_amount",
+              "type": "Money",
+              "remark": "",
+              "chnname": "合同金额"
+            },
+            {
+              "name": "con_time",
+              "type": "Date",
+              "remark": "",
+              "chnname": "签订日期"
+            },
+            {
+              "name": "con_first",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "合同甲方"
+            },
+            {
+              "name": "first_contacts",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "甲方联系人"
+            },
+            {
+              "name": "first_phone",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "甲方联系方式"
+            },
+            {
+              "name": "con_second",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "合同乙方"
+            },
+            {
+              "name": "second_contacts",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "乙方联系人"
+            },
+            {
+              "name": "second_phone",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "乙方联系方式"
+            },
+            {
+              "name": "remark",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": false,
+              "defaultValue": "0"
+            },
+            {
+              "name": "create_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": false
+            },
+            {
+              "name": "create_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": false
+            },
+            {
+              "name": "update_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "设备合同",
+          "remark": "设备合同"
         }
       ],
       "graphCanvas": {
@@ -642,51 +1196,53 @@
       },
       {
         "name": "guid",
-        "type": "DefaultString",
-        "remark": "guid",
+        "type": "IdOrKey",
+        "remark": "",
         "chnname": "Guid",
-        "notNull": true
+        "notNull": true,
+        "defaultValue": ""
       },
       {
         "name": "remark",
         "type": "Intro",
-        "remark": "备注",
+        "remark": "",
         "chnname": "备注"
-      },
-      {
-        "name": "create_by",
-        "type": "IdOrKey",
-        "remark": "创建者",
-        "chnname": "创建人",
-        "notNull": true
-      },
-      {
-        "name": "create_time",
-        "type": "DateTime",
-        "remark": "创建时间",
-        "chnname": "创建时间",
-        "notNull": true
-      },
-      {
-        "name": "update_by",
-        "type": "IdOrKey",
-        "remark": "更新者",
-        "chnname": "更新人",
-        "notNull": true
-      },
-      {
-        "name": "update_time",
-        "type": "DateTime",
-        "remark": "更新时间",
-        "chnname": "更新时间",
-        "notNull": true
       },
       {
         "name": "del_flag",
         "type": "Char",
-        "remark": "删除标志（0代表存在 2代表删除）",
+        "remark": "（0代表存在 2代表删除）",
         "chnname": "删除状态",
-        "notNull": true
+        "notNull": false,
+        "defaultValue": "0"
+      },
+      {
+        "name": "create_by",
+        "type": "IdOrKey",
+        "remark": "",
+        "chnname": "创建人",
+        "notNull": false
+      },
+      {
+        "name": "create_time",
+        "type": "DateTime",
+        "remark": "",
+        "chnname": "创建时间",
+        "notNull": false
+      },
+      {
+        "name": "update_by",
+        "type": "IdOrKey",
+        "remark": "",
+        "chnname": "更新人",
+        "notNull": false
+      },
+      {
+        "name": "update_time",
+        "type": "DateTime",
+        "remark": "",
+        "chnname": "更新时间",
+        "notNull": false
       }
     ],
     "defaultFieldsType": "1",

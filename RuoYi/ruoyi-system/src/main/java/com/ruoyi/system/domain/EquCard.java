@@ -49,8 +49,17 @@ public class EquCard extends BaseEntity
     /** 总价 元 */
     private Double equPrice;
 
+    /** 合同 设备合同表主键 */
+    private Long contractId;
+    
+    /** 合同名称 */
+    private String contractName;
+    
     /** 供应商 设备供应商表主键 */
     private Long supplierId;
+    
+    /** 供应商名称 */
+    private String supplierName;
 
     /** 品牌 */
     private String equBrand;
@@ -176,6 +185,16 @@ public class EquCard extends BaseEntity
     {
         return equPrice;
     }
+    public void setContractId(Long contractId) 
+    {
+        this.contractId = contractId;
+    }
+
+    public Long getContractId() 
+    {
+        return contractId;
+    }
+    
     public void setSupplierId(Long supplierId) 
     {
         this.supplierId = supplierId;
@@ -285,6 +304,24 @@ public class EquCard extends BaseEntity
         this.deptName = deptName;
     }
     
+    public String getContractName() 
+    {
+        return contractName;
+    }
+    public void setContractName(String contractName) 
+    {
+        this.contractName = contractName;
+    }
+    
+    public String getSupplierName() 
+    {
+        return supplierName;
+    }
+    public void setSupplierName(String supplierName) 
+    {
+        this.supplierName = supplierName;
+    }
+    
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -297,6 +334,7 @@ public class EquCard extends BaseEntity
             .append("equCount", getEquCount())
             .append("equSprice", getEquSprice())
             .append("equPrice", getEquPrice())
+            .append("contractId", getContractId())
             .append("supplierId", getSupplierId())
             .append("equBrand", getEquBrand())
             .append("equParam", getEquParam())

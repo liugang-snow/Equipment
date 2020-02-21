@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="equCount"    column="equ_count"    />
         <result property="equSprice"    column="equ_sprice"    />
         <result property="equPrice"    column="equ_price"    />
+        <result property="contractId"    column="contract_id"    />
         <result property="supplierId"    column="supplier_id"    />
         <result property="equBrand"    column="equ_brand"    />
         <result property="equParam"    column="equ_param"    />
@@ -33,35 +34,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectEquCardVo">
-        select equ_id, equ_guid, equ_serial, equ_code, equ_name, class_id, equ_count, equ_sprice, equ_price, supplier_id, equ_brand, equ_param, dept_id, equ_admin, equ_time, equ_year, equ_status, equ_area, equ_attribute, remark, del_flag, create_by, create_time, update_by, update_time from equ_card
+        select e.*, c.class_name as className, h.con_name as contractName, s.sup_name as supplierName, d.dept_name as deptName
+        from equ_card e
+        left join equ_class c on c.class_id = e.class_id
+        left join equ_contract h on h.con_id = e.contract_id
+        left join equ_supplier s on s.sup_id = e.supplier_id
+        left join sys_dept d on d.dept_id = e.dept_id
     </sql>
 
     <select id="selectEquCardList" parameterType="EquCard" resultMap="EquCardResult">
         <include refid="selectEquCardVo"/>
         <where>  
             <if test="equSerial != null  and equSerial != ''"> 
-            	and equ_serial like concat('%', #{equSerial}, '%')
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
            	</if>
             <if test="equName != null  and equName != ''"> 
-            	and equ_name like concat('%', #{equName}, '%')
+            	and e.equ_name like concat('%', #{equName}, '%')
             </if>
             <if test="equStatus != null  and equStatus != ''"> 
-            	and equ_status = #{equStatus}
+            	and e.equ_status = #{equStatus}
             </if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-				and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+				and date_format(e.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
 			</if>
 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-				and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+				and date_format(e.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
 			</if>
-            and del_flag = '0'
-            order by equ_id 
+            and e.del_flag = '0'
+            order by e.create_time desc
         </where>
     </select>
     
     <select id="selectEquCardById" parameterType="Long" resultMap="EquCardResult">
         <include refid="selectEquCardVo"/>
-        where equ_id = #{equId}
+        where e.equ_id = #{equId}
     </select>
         
     <insert id="insertEquCard" parameterType="EquCard" useGeneratedKeys="true" keyProperty="equId">
@@ -75,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="equCount != null ">equ_count,</if>
             <if test="equSprice != null ">equ_sprice,</if>
             <if test="equPrice != null ">equ_price,</if>
+            <if test="contractId != null ">contract_id,</if>
             <if test="supplierId != null ">supplier_id,</if>
             <if test="equBrand != null  and equBrand != ''">equ_brand,</if>
             <if test="equParam != null  and equParam != ''">equ_param,</if>
@@ -101,6 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="equCount != null ">#{equCount},</if>
             <if test="equSprice != null ">#{equSprice},</if>
             <if test="equPrice != null ">#{equPrice},</if>
+            <if test="contractId != null ">#{contractId},</if>
             <if test="supplierId != null ">#{supplierId},</if>
             <if test="equBrand != null  and equBrand != ''">#{equBrand},</if>
             <if test="equParam != null  and equParam != ''">#{equParam},</if>
@@ -131,6 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="equCount != null ">equ_count = #{equCount},</if>
             <if test="equSprice != null ">equ_sprice = #{equSprice},</if>
             <if test="equPrice != null ">equ_price = #{equPrice},</if>
+            <if test="contractId != null ">contract_id = #{contractId},</if>
             <if test="supplierId != null ">supplier_id = #{supplierId},</if>
             <if test="equBrand != null  and equBrand != ''">equ_brand = #{equBrand},</if>
             <if test="equParam != null  and equParam != ''">equ_param = #{equParam},</if>
@@ -168,5 +177,95 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <parameterMap type="java.util.Map" id="initMap">
         <parameter property="result" mode="OUT" jdbcType="VARCHAR"/>
     </parameterMap>
+       
+    <select id="selectSupList" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' and e.supplier_id = #{supplierId}
+        </where>
+    </select>
     
+    <select id="selectConList" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' and e.contract_id = #{contractId}
+        </where>
+    </select>
+    
+    <update id="deleteSup" parameterType="Long">
+        update equ_card set supplier_id = null where equ_id = #{equId}
+    </update>
+
+    <update id="deleteSups" parameterType="String">
+        update equ_card set supplier_id = null where equ_id in 
+        <foreach item="equId" collection="array" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+    
+    <update id="deleteCon" parameterType="Long">
+        update equ_card set contract_id = null where equ_id = #{equId}
+    </update>
+
+    <update id="deleteCons" parameterType="String">
+        update equ_card set contract_id = null where equ_id in 
+        <foreach item="equId" collection="array" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+    
+    <select id="selectSupListNo" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' 
+            and (e.supplier_id != #{supplierId} or e.supplier_id is null)
+        </where>
+    </select>
+    
+    <select id="selectConListNo" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' 
+            and (e.contract_id != #{contractId} or e.contract_id is null)
+        </where>
+    </select>
+    
+    <update id="selectCardsSup" >
+        update equ_card set supplier_id = #{param2} where equ_id in 
+        <foreach item="equId" collection="param1" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+    
+    <update id="selectCardsCon" >
+        update equ_card set contract_id = #{param2} where equ_id in 
+        <foreach item="equId" collection="param1" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+      
 </mapper>

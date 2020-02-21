@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('设备档案选择合同')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+     	<input name="cId" type="hidden" id="cId"/>
+        <input name="cName" type="hidden" id="cName"/>
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>合同编号：</p>
+                                <input type="text" name="conCode"/>
+                            </li>
+                            <li>
+                                <p>合同名称：</p>
+                                <input type="text" name="conName"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/equcontract";
+        
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+		        sortName: "createTime",
+		        sortOrder: "desc",
+                modalName: "设备合同",
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+		        clickToSelect: true,
+		        rememberSelected: true,
+                columns: [{
+                	radio: true,
+                	formatter: function (value, row, index) {
+                		$("#cId").val(row.conId);
+                		$("#cName").val(row.conName);
+		        	}
+                },
+                {
+                    field : 'conId', 
+                    title : 'ID 主键',
+                    visible: false
+                },
+                {
+                    field : 'conCode', 
+                    title : '合同编号'
+                },
+                {
+                    field : 'conName', 
+                    title : '合同名称'
+                },
+                {
+                    field : 'conAmount', 
+                    title : '合同金额(万元)'
+                },
+                {
+                    field : 'conTime', 
+                    title : '签订日期',
+                	sortable: true
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间',
+                    sortable: true
+                }]
+            };
+            $.table.init(options);
+        });       
+    </script>
+</body>
+</html>

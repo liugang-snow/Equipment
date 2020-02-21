@@ -129,4 +129,13 @@ public class EquSupplierController extends BaseController
     {
         return toAjax(equSupplierService.deleteEquSupplierByIds(ids));
     }
+    
+    /**
+     * 设备档案-选择供应商
+     */
+    @GetMapping("/selectSups")
+    public String selectSups()
+    {
+        return prefix + "/selectSups";
+    }
 }

@@ -11,15 +11,15 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <p style="width:auto">统一社会信用代码：</p>
+                                <p style="width:118px">统一社会信用代码：</p>
                                 <input type="text" name="supCode"/>
                             </li>
                             <li>
-                                <p>企业名称：</p>
+                                <p style="width:118px">企业名称：</p>
                                 <input type="text" name="supName"/>
                             </li>
                             <li>
-                                <p style="width:auto">法定代表人：</p>
+                                <p style="width:118px">法定代表人：</p>
                                 <input type="text" name="supLeg"/>
                             </li>
                             <li>
@@ -27,14 +27,14 @@
                                 <input type="text" name="supContact"/>
                             </li>
                             <li>
-                                <p>状态 ：</p>
+                                <p style="width:118px">状态 ：</p>
                                 <select name="status" th:with="type=${@dict.getType('supplier_status_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li class="select-time">
-                                <p style="width:78px">创建时间：</p>
+                                <p style="width:118px">创建时间：</p>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
@@ -73,6 +73,7 @@
         var removeFlag = [[${@permission.hasPermi('system:equsupplier:remove')}]];
         var statusDatas = [[${@dict.getType('supplier_status_type')}]];
         var prefix = ctx + "system/equsupplier";
+        var prefixequ = ctx + "system/equcard";
 
         $(function() {
             var options = {
@@ -128,6 +129,7 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.supId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="selectEqu(\'' + row.supId + '\')"><i class="fa fa-user"></i>选择设备</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.supId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -135,6 +137,12 @@
             };
             $.table.init(options);
         });
+        
+		/* 设备供应商-选择设备 */
+		function selectEqu(id) {
+		    var url = prefixequ + '/selectEqus/' + id + '/sup';
+		    $.modal.openTab("选择设备", url);
+		}
     </script>
 </body>
 </html>

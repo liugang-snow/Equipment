@@ -113,4 +113,124 @@ public class EquCardServiceImpl implements IEquCardService
         
     	return parameterMap.get("result").toString();
     }
+    
+    /**
+     * 查询设备档案列表-供应商-已选择
+     * 
+     * @param equCard 设备档案
+     * @return 设备档案
+     */
+    @Override
+    public List<EquCard> selectSupList(EquCard equCard)
+    {
+        return equCardMapper.selectSupList(equCard);
+    }
+    
+    /**
+     * 查询设备档案列表-合同-已选择
+     * 
+     * @param equCard 设备档案
+     * @return 设备档案
+     */
+    @Override
+    public List<EquCard> selectConList(EquCard equCard)
+    {
+        return equCardMapper.selectConList(equCard);
+    }
+    
+    /**
+     * 移除设备档案对象-供应商
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteSups(String ids)
+    {
+        return equCardMapper.deleteSups(Convert.toStrArray(ids));
+    }
+
+    /**
+     * 移除设备档案信息-供应商
+     * 
+     * @param equId 设备档案ID
+     * @return 结果
+     */
+    @Override
+    public int deleteSup(Long equId)
+    {
+        return equCardMapper.deleteSup(equId);
+    }
+    
+    /**
+     * 移除设备档案对象-合同
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteCons(String ids)
+    {
+        return equCardMapper.deleteCons(Convert.toStrArray(ids));
+    }
+
+    /**
+     * 移除设备档案信息-合同
+     * 
+     * @param equId 设备档案ID
+     * @return 结果
+     */
+    @Override
+    public int deleteCon(Long equId)
+    {
+        return equCardMapper.deleteCon(equId);
+    }
+    
+    /**
+     * 查询设备档案列表-供应商-未已选择
+     * 
+     * @param equCard 设备档案
+     * @return 设备档案
+     */
+    @Override
+    public List<EquCard> selectSupListNo(EquCard equCard)
+    {
+        return equCardMapper.selectSupListNo(equCard);
+    }
+    
+    /**
+     * 查询设备档案列表-合同-未已选择
+     * 
+     * @param equCard 设备档案
+     * @return 设备档案
+     */
+    @Override
+    public List<EquCard> selectConListNo(EquCard equCard)
+    {
+        return equCardMapper.selectConListNo(equCard);
+    }
+    
+    /**
+     * 添加设备档案-供应商
+     * 
+     * @param ids 需要添加的数据ID
+     * @return 结果
+     */
+    @Override
+    public int selectCardsSup(String ids, Long mId)
+    {
+        return equCardMapper.selectCardsSup(Convert.toStrArray(ids), mId);
+    }
+    
+    /**
+     * 添加设备档案-合同
+     * 
+     * @param ids 需要添加的数据ID
+     * @return 结果
+     */
+    @Override
+    public int selectCardsCon(String ids, Long mId)
+    {
+        return equCardMapper.selectCardsCon(Convert.toStrArray(ids), mId);
+    }
 }
