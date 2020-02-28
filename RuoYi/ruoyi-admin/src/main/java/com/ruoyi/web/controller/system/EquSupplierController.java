@@ -43,6 +43,17 @@ public class EquSupplierController extends BaseController
     {
         return prefix + "/equsupplier";
     }
+    
+    /**
+     * 修改设备供应商
+     */
+    @GetMapping("/detail/{supId}")
+    public String detail(@PathVariable("supId") Long supId, ModelMap mmap)
+    {
+        EquSupplier equSupplier = equSupplierService.selectEquSupplierById(supId);
+        mmap.put("equSupplier", equSupplier);
+        return prefix + "/detail";
+    }
 
     /**
      * 查询设备供应商列表

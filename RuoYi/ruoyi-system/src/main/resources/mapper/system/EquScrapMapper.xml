@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.EquScrapMapper">
+    
+    <resultMap type="EquScrap" id="EquScrapResult">
+        <result property="scrId"    column="scr_id"    />
+        <result property="scrGuid"    column="scr_guid"    />
+        <result property="scrSerial"    column="scr_serial"    />
+        <result property="scrCode"    column="scr_code"    />
+        <result property="equId"    column="equ_id"    />
+        <result property="scrReason"    column="scr_reason"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectEquScrapVo">
+        select s.*, c.equ_name as equName, c.equ_serial as equSerial from equ_scrap s
+        left join equ_card c on s.equ_id = c.equ_id
+    </sql>
+
+    <select id="selectEquScrapList" parameterType="EquScrap" resultMap="EquScrapResult">
+        <include refid="selectEquScrapVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectEquScrapById" parameterType="Long" resultMap="EquScrapResult">
+        <include refid="selectEquScrapVo"/>
+        where s.scr_id = #{scrId}
+    </select>
+        
+    <insert id="insertEquScrap" parameterType="EquScrap" useGeneratedKeys="true" keyProperty="scrId">
+        insert into equ_scrap
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="scrGuid != null  and scrGuid != ''">scr_guid,</if>
+            <if test="scrSerial != null  and scrSerial != ''">scr_serial,</if>
+            <if test="scrCode != null  and scrCode != ''">scr_code,</if>
+            <if test="equId != null  and equId != ''">equ_id,</if>
+            <if test="scrReason != null  and scrReason != ''">scr_reason,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="scrGuid != null  and scrGuid != ''">#{scrGuid},</if>
+            <if test="scrSerial != null  and scrSerial != ''">#{scrSerial},</if>
+            <if test="scrCode != null  and scrCode != ''">#{scrCode},</if>
+            <if test="equId != null  and equId != ''">#{equId},</if>
+            <if test="scrReason != null  and scrReason != ''">#{scrReason},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquScrap" parameterType="EquScrap">
+        update equ_scrap
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scrGuid != null  and scrGuid != ''">scr_guid = #{scrGuid},</if>
+            <if test="scrSerial != null  and scrSerial != ''">scr_serial = #{scrSerial},</if>
+            <if test="scrCode != null  and scrCode != ''">scr_code = #{scrCode},</if>
+            <if test="equId != null  and equId != ''">equ_id = #{equId},</if>
+            <if test="scrReason != null  and scrReason != ''">scr_reason = #{scrReason},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where scr_id = #{scrId}
+    </update>
+
+    <delete id="deleteEquScrapById" parameterType="Long">
+        update equ_scrap set del_flag = '2' where scr_id = #{scrId}
+    </delete>
+
+    <delete id="deleteEquScrapByIds" parameterType="String">
+        update equ_scrap set del_flag = '2' where scr_id in 
+        <foreach item="scrId" collection="array" open="(" separator="," close=")">
+            #{scrId}
+        </foreach>
+    </delete>
+    
+    <update id="getSerialNumScr" parameterMap="initMap" statementType="CALLABLE">
+        CALL GetSerialNumScr(?)
+    </update>
+    <parameterMap type="java.util.Map" id="initMap">
+        <parameter property="result" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+    
+</mapper>

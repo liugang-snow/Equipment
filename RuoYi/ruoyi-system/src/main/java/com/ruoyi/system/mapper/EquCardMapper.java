@@ -136,6 +136,7 @@ public interface EquCardMapper
      * 添加设备档案-供应商
      * 
      * @param equIds 需要添加的数据ID
+     * @param mId 供应商ID
      * @return 结果
      */
     public int selectCardsSup(String[] equIds, Long mId);
@@ -144,8 +145,27 @@ public interface EquCardMapper
      * 添加设备档案-合同
      * 
      * @param equIds 需要添加的数据ID
+     * @param mId 合同ID
      * @return 结果
      */
     public int selectCardsCon(String[] equIds, Long mId);
+    
+    /**
+     * 设置设备档案状态
+     * 
+     * @param equId 需要添加的数据ID
+     * @param status 状态
+     * @return 结果
+     */
+    public int setStatus(Long equId, char status);
+    
+    /**
+     * 批量设置设备档案状态
+     * 
+     * @param equIds 需要添加的数据ID
+     * @param status 状态 
+     * @return 结果
+     */
+    public int setStatuses(String[] equIds, char status);
 
 }

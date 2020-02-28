@@ -43,6 +43,17 @@ public class EquContractController extends BaseController
     {
         return prefix + "/equcontract";
     }
+    
+    /**
+     * 设备合同查看
+     */
+    @GetMapping("/detail/{conId}")
+    public String detail(@PathVariable("conId") Long conId, ModelMap mmap)
+    {
+        EquContract equContract = equContractService.selectEquContractById(conId);
+        mmap.put("equContract", equContract);
+        return prefix + "/detail";
+    }
 
     /**
      * 查询设备合同列表

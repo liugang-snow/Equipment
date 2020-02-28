@@ -38,48 +38,59 @@ public class EquCard extends BaseEntity
     private Long classId;
 
     /** 设备类别名称 */
+    @Excel(name = "设备分类")
     private String className;
     
     /** 数量 */
+    @Excel(name = "数量")
     private Double equCount;
 
     /** 单价 元 */
+    @Excel(name = "单价(元)")
     private Double equSprice;
 
     /** 总价 元 */
+    @Excel(name = "总价(元)")
     private Double equPrice;
 
     /** 合同 设备合同表主键 */
     private Long contractId;
     
     /** 合同名称 */
+    @Excel(name = "合同名称")
     private String contractName;
     
     /** 供应商 设备供应商表主键 */
     private Long supplierId;
     
     /** 供应商名称 */
+    @Excel(name = "供应商名称")
     private String supplierName;
 
     /** 品牌 */
+    @Excel(name = "品牌")
     private String equBrand;
 
     /** 规格型号 */
+    @Excel(name = "规格型号")
     private String equParam;
 
     /** 所属部门 部门表主键 */
     private Long deptId;
 
     /** 所属部门名称  */
+    @Excel(name = "所属部门")
     private String deptName;
     
     /** 设备管理员 用户表主键 */
     private String equAdmin;
 
     /** 设备采购时间 */
+    @Excel(name = "采购时间")
     private Date equTime;
 
     /** 设备使用年限 */
+    @Excel(name = "使用年限")
     private Long equYear;
 
     /** 设备使用状态 （0-闲置 1-正常使用 2-故障 3-报废报损） */
@@ -87,6 +98,7 @@ public class EquCard extends BaseEntity
     private String equStatus;
 
     /** 所在区域 */
+    @Excel(name = "所在区域")
     private String equArea;
 
     /** 特种属性 字典选取 */
@@ -95,6 +107,9 @@ public class EquCard extends BaseEntity
     /** 删除状态 （0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 报废报损id */
+    private Long scrId;
+    
     public void setEquId(Long equId) 
     {
         this.equId = equId;
@@ -320,6 +335,16 @@ public class EquCard extends BaseEntity
     public void setSupplierName(String supplierName) 
     {
         this.supplierName = supplierName;
+    }
+    
+    public void setScrId(Long scrId) 
+    {
+        this.scrId = scrId;
+    }
+
+    public Long getScrId() 
+    {
+        return scrId;
     }
     
     @Override

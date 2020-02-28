@@ -44,6 +44,17 @@ public class EquClassController extends BaseController
     {
         return prefix + "/equclass";
     }
+    
+    /**
+     * 设备分类查看
+     */
+    @GetMapping("/detail/{classId}")
+    public String detail(@PathVariable("classId") Long classId, ModelMap mmap)
+    {
+        EquClass equClass = equClassService.selectEquClassById(classId);
+        mmap.put("equClass", equClass);
+        return prefix + "/detail";
+    }
 
     /**
      * 查询设备分类树列表

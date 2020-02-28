@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('设备档案列表')" />
+    <th:block th:include="include :: header('设备报废报损列表')" />
 </head>
 <body class="gray-bg">
-    <div class="container-div">
+     <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
                         <ul>
-                            <li>
+                        	<li>
                                 <p>流水号：</p>
                                 <input type="text" name="equSerial"/>
                             </li>
@@ -39,21 +39,6 @@
                     </div>
                 </form>
             </div>
-
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="system:equcard:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.editTab()" shiro:hasPermission="system:equcard:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:equcard:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:equcard:export">
-                    <i class="fa fa-download"></i> 导出
-                 </a>
-            </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
@@ -61,31 +46,31 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:equcard:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:equcard:remove')}]];
+    	var addFlag = [[${@permission.hasPermi('system:equscrap:add')}]];
+        var editFlag = [[${@permission.hasPermi('system:equscrap:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:equscrap:remove')}]];
         var equStatusDatas = [[${@dict.getType('equ_status_type')}]];
-        var prefix = ctx + "system/equcard";
-
+        var prefix = ctx + "system/equscrap";
+        var prefixlist = ctx + "system/equcard";
+        
         $(function() {
             var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
+                url: prefixlist + "/list",
+                createUrl: prefix + "/add", 
                 detailUrl: prefix + "/detail/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "设备档案",
                 columns: [{
-                    checkbox: true
-                },
-                {
                     field : 'equId', 
                     title : 'ID 主键',
                     visible: false
                 },
                 {
+                    field : 'scrId', 
+                    title : '报废报损 ID',
+                    visible: false
+                },
+                {
                     field : 'equSerial', 
-                    title : '流水号'
+                    title : '设备流水号'
                 },
                 {
                     field : 'equName', 
@@ -115,19 +100,36 @@
                     title : '创建时间'
                 },
                 {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.equId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.equId + '\')"><i class="fa fa-remove"></i>删除</a> ');
-                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.equId + '\')"><i class="fa fa-search"></i>查看</a>');
-                        return actions.join('');
-                    }
+                	title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                if (row.equStatus != '3'){
+		                	actions.push('<a class="btn btn-danger btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="addScrap(\'' + row.equId + '\')"><i class="fa fa-remove"></i>报废报损</a> ');
+		            	}
+		                else {
+		                	actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="$.operate.detail(\'' + row.scrId + '\')"><i class="fa fa-search"></i>查看</a> ');
+		                	actions.push('<a class="btn btn-warning btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="cancelScrap(\'' + row.scrId + '\',\'' + row.equId + '\')"><i class="fa fa-warning"></i>作废</a> ');
+		                }
+		                return actions.join('');
+		            }
                 }]
             };
             $.table.init(options);
         });
+        
+		/* 设备报废报损 */
+		function addScrap(equId) {
+			var url = prefix + '/add/' + equId;
+		    $.modal.open("设备报废报损", url); 
+		}
+				
+		/* 设备报废报损 作废 */
+		function cancelScrap(scrId, equId) {
+			$.modal.confirm("确认要作废吗？", function() {
+				$.operate.post(prefix + "/cancelScrap", { "scrId": scrId, "equId": equId });
+		    })
+		}
     </script>
 </body>
 </html>

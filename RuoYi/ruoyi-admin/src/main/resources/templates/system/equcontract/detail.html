@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看设备合同')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-equcontract-detail" th:object="${equContract}">
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同编号：</label>
+                <div class="col-sm-8">
+                    <input name="conCode" th:field="*{conCode}" class="form-control" type="text" placeholder="请输入合同编号" required readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同名称：</label>
+                <div class="col-sm-8">
+                    <input name="conName" th:field="*{conName}" class="form-control" type="text" placeholder="请输入合同名称" required readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同金额(万元)：</label>
+                <div class="col-sm-2">
+                    <input name="conAmount" th:field="*{conAmount}" class="form-control" type="text" placeholder="请输入合同金额" required readonly>
+                </div>   
+                <label class="col-sm-3 control-label ">签订日期：</label>
+                <div class="col-sm-3">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="conTime" th:value="${#dates.format(equContract.conTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" required readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同甲方：</label>
+                <div class="col-sm-8">
+                    <input name="conFirst" th:field="*{conFirst}" class="form-control" type="text" placeholder="请输入合同甲方" required readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">甲方联系人：</label>
+                <div class="col-sm-2">
+                    <input name="firstContacts" th:field="*{firstContacts}" class="form-control" type="text" placeholder="请输入甲方联系人" required readonly>
+                </div>   
+                <label class="col-sm-3 control-label ">甲方联系方式：</label>
+                <div class="col-sm-3">
+                    <input name="firstPhone" th:field="*{firstPhone}" class="form-control" type="text" placeholder="请输入甲方联系方式" required readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同乙方：</label>
+                <div class="col-sm-8">
+                    <input name="conSecond" th:field="*{conSecond}" class="form-control" type="text" placeholder="请输入合同乙方" required readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">乙方联系人：</label>
+                <div class="col-sm-2">
+                    <input name="secondContacts" th:field="*{secondContacts}" class="form-control" type="text" placeholder="请输入乙方联系人" required readonly>
+                </div>   
+                <label class="col-sm-3 control-label ">乙方联系方式：</label>
+                <div class="col-sm-3">
+                    <input name="secondPhone" th:field="*{secondPhone}" class="form-control" type="text" placeholder="请输入乙方联系方式" required readonly>
+                </div>
+            </div>
+            <h4 class="form-header h4">其他信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注 ：</label>
+                <div class="col-sm-8"> 
+                	<input id="remark" name="remark" class="form-control" type="text" th:field="*{remark}" readonly>
+                </div>
+             </div>
+             <h4 class="form-header h4">附件</h4>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        $("#form-equcontract-detail").validate({
+            focusCleanup: true
+        });
+    </script>
+</body>
+</html>

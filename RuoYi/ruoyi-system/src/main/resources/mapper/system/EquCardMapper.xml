@@ -34,12 +34,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectEquCardVo">
-        select e.*, c.class_name as className, h.con_name as contractName, s.sup_name as supplierName, d.dept_name as deptName
+        select e.*, c.class_name as className, h.con_name as contractName, s.sup_name as supplierName, d.dept_name as deptName, sc.scr_id as scrId
         from equ_card e
         left join equ_class c on c.class_id = e.class_id
         left join equ_contract h on h.con_id = e.contract_id
         left join equ_supplier s on s.sup_id = e.supplier_id
         left join sys_dept d on d.dept_id = e.dept_id
+        left join equ_scrap sc on e.equ_id = sc.equ_id and sc.del_flag = '0'
     </sql>
 
     <select id="selectEquCardList" parameterType="EquCard" resultMap="EquCardResult">
@@ -51,15 +52,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="equName != null  and equName != ''"> 
             	and e.equ_name like concat('%', #{equName}, '%')
             </if>
+            <if test="params.beginPrice != null and params.beginPrice != ''"><!-- 总价检索 -->
+				and e.equ_price &gt;= #{params.beginPrice}
+			</if>
+			<if test="params.endPrice != null and params.endPrice != ''"><!-- 总价检索 -->
+				and e.equ_price &lt;= #{params.endPrice}
+			</if>
+			<if test="deptName != null  and deptName != ''"> 
+            	and d.dept_name like concat('%', #{deptName}, '%')
+            </if>
+            <if test="supplierName != null  and supplierName != ''"> 
+            	and s.sup_name like concat('%', #{supplierName}, '%')
+            </if>
+            <if test="contractName != null  and contractName != ''"> 
+            	and h.con_name like concat('%', #{contractName}, '%')
+            </if>
             <if test="equStatus != null  and equStatus != ''"> 
             	and e.equ_status = #{equStatus}
-            </if>
+            </if>          
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
 				and date_format(e.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
 			</if>
 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
 				and date_format(e.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
 			</if>
+			<if test="createBy != null  and createBy != ''"> 
+            	and e.create_by like concat('%', #{createBy}, '%')
+            </if>
             and e.del_flag = '0'
             order by e.create_time desc
         </where>
@@ -267,5 +286,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{equId}
         </foreach>
     </update>
-      
+    
+    <update id="setStatus" >
+        update equ_card set equ_status = #{param2} where equ_id = #{param1}
+    </update>
+    
+    <update id="setStatuses" >
+        update equ_card set equ_status = #{param2} where equ_id in 
+        <foreach item="equId" collection="param1" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+          
 </mapper>

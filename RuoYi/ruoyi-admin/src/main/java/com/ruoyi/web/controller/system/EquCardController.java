@@ -16,6 +16,8 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.EquCard;
 import com.ruoyi.system.service.IEquCardService;
+import com.ruoyi.system.service.IEquContractService;
+import com.ruoyi.system.service.IEquSupplierService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -36,12 +38,53 @@ public class EquCardController extends BaseController
 
     @Autowired
     private IEquCardService equCardService;
-        
+    
+    @Autowired
+    private IEquContractService equContractService;
+    
+    @Autowired
+    private IEquSupplierService equSupplierService;
+    
     @RequiresPermissions("system:equcard:view")
     @GetMapping()
     public String equcard()
     {
         return prefix + "/equcard";
+    }
+    
+    /**
+     * 设备档案查看
+     */
+    @GetMapping("/detail/{equId}")
+    public String detail(@PathVariable("equId") Long equId, ModelMap mmap)
+    {
+        EquCard equCard = equCardService.selectEquCardById(equId);     
+        mmap.put("equCard", equCard);
+        return prefix + "/detail";
+    }
+  
+    /**
+     * 设备查询
+     */
+    @RequiresPermissions("system:equcard:search")
+    @GetMapping("/search")
+    public String equcardsearch()
+    {
+        return prefix + "/search";
+    }
+    
+    /**
+     * 设备查询-查看
+     */
+    @RequiresPermissions("system:equcard:search")
+    @GetMapping("/searchView/{equId}")
+    public String searchView(@PathVariable("equId") Long equId, ModelMap mmap)
+    {    
+    	EquCard equCard = equCardService.selectEquCardById(equId);    	
+        mmap.put("equCard", equCard);
+        mmap.put("equContract", equContractService.selectEquContractById(equCard.getContractId()));
+        mmap.put("equSupplier", equSupplierService.selectEquSupplierById(equCard.getSupplierId()));
+        return prefix + "/searchView";
     }
 
     /**

@@ -233,4 +233,30 @@ public class EquCardServiceImpl implements IEquCardService
     {
         return equCardMapper.selectCardsCon(Convert.toStrArray(ids), mId);
     }
+    
+    /**
+     * 设置设备档案状态
+     * 
+     * @param equId 需要添加的数据ID
+     * @param status 状态
+     * @return 结果
+     */
+    @Override
+    public int setStatus(Long equId, char status)
+    {
+        return equCardMapper.setStatus(equId, status);
+    }
+    
+    /**
+     * 批量设置设备档案状态
+     * 
+     * @param equIds 需要添加的数据ID
+     * @param status 状态 
+     * @return 结果
+     */
+    @Override
+    public int setStatuses(String ids, char status)
+    {
+        return equCardMapper.setStatuses(Convert.toStrArray(ids), status);
+    }
 }

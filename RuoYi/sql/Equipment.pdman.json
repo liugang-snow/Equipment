@@ -703,6 +703,143 @@
           ],
           "chnname": "设备合同",
           "remark": "设备合同"
+        },
+        {
+          "title": "equ_scrap",
+          "fields": [
+            {
+              "name": "scr_id",
+              "type": "BigInt",
+              "remark": "主键",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "scr_guid",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "Guid",
+              "notNull": true,
+              "defaultValue": ""
+            },
+            {
+              "name": "scr_serial",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "报废报损流水号"
+            },
+            {
+              "name": "scr_code",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "报废报损单编号"
+            },
+            {
+              "name": "equ_id",
+              "type": "BigInt",
+              "remark": "设备档案表主键",
+              "chnname": "设备id"
+            },
+            {
+              "name": "scr_reason",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "报废理由"
+            },
+            {
+              "name": "remark",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": false,
+              "defaultValue": "0"
+            },
+            {
+              "name": "create_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": false
+            },
+            {
+              "name": "create_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": false
+            },
+            {
+              "name": "update_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "设备报废报损表",
+          "remark": "设备报废报损表"
         }
       ],
       "graphCanvas": {
